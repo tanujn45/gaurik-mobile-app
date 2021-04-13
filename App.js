@@ -1,21 +1,44 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from "react"
+import AppLoading from 'expo-app-loading'
+import { StyleSheet, Text, View } from "react-native"
+import * as Font from 'expo-font'
+
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import SignIn from "./screens/SignIn";
+import Home from "./screens/Home";
+
+const Stack = createStackNavigator();
+
+const getFonts = () => Font.loadAsync({
+  'manropeRegular': require('./assets/fonts/Manrope-Medium.ttf'),
+  'manropeBold': require('./assets/fonts/Manrope-Bold.ttf'),
+  'manropeLight': require('./assets/fonts/Manrope-Light.ttf')
+})
+
+
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+  const [fontsLoaded, setFontsLoaded] = useState(false)
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+  if (!fontsLoaded)
+    return <AppLoading
+      startAsync={getFonts}
+      onFinish={() => setFontsLoaded(true)}
+      onError={() => console.log('error')}
+    />
+  else {
+    return (
+      <NavigationContainer>
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false
+          }}
+        >
+          <Stack.Screen name="SignIn" component={SignIn} />
+          <Stack.Screen name="Home" component={Home} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    )
+  }
+}
