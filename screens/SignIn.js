@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TextInput, Button, Image } from "react-native";
+import { View, Text, StyleSheet, TextInput, Image } from "react-native";
 
 import Styles from "../assets/css/Styles";
 import AppButton from "../components/AppButton";
@@ -29,10 +29,9 @@ function SignIn({ navigation }) {
         <AppButton
           title="Log In"
           style={styles.button}
-          onPress={() => navigation.navigate("Home")}
+          onPress={() => navigation.navigate("TabNavigation")}
         />
       </View>
-      {/* <Button title="Press" onPress={() => navigation.navigate("Home")} /> */}
       <Image
         style={styles.image}
         source={require("../assets/img/design/signIn.png")}

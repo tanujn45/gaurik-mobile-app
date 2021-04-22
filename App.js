@@ -6,7 +6,7 @@ import * as Font from 'expo-font'
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SignIn from "./screens/SignIn";
-import Home from "./screens/Home";
+import TabNavigation from "./navigators/TabNavigation";
 
 const Stack = createStackNavigator();
 
@@ -36,7 +36,7 @@ export default function App() {
           }}
         >
           <Stack.Screen name="SignIn" component={SignIn} />
-          <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen name="TabNavigation" component={TabNavigation} />
         </Stack.Navigator>
       </NavigationContainer>
     )
