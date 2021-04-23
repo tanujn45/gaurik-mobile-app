@@ -1,11 +1,12 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Categories from "../screens/Categories";
 import Products from "../screens/Products";
 import CartNavigation from "../navigators/CartNavigaiton";
 import { StyleSheet } from "react-native";
 import Entypo from "react-native-vector-icons/Entypo";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import ProductsNavigation from "./ProductsNavigation";
+import Profile from "../screens/Profile";
 
 const Tab = createBottomTabNavigator();
 
@@ -33,7 +34,7 @@ function TabNavigation() {
           ),
         }}
         name="Categories"
-        component={Categories}
+        component={ProductsNavigation}
       />
       <Tab.Screen
         options={{
@@ -41,8 +42,8 @@ function TabNavigation() {
             <Entypo color={color} size={30} name="shopping-cart" />
           ),
         }}
-        name="Products"
-        component={Products}
+        name="Cart"
+        component={CartNavigation}
       />
       <Tab.Screen
         options={{
@@ -55,21 +56,11 @@ function TabNavigation() {
             />
           ),
         }}
-        name="Cart"
-        component={CartNavigation}
+        name="Profile"
+        component={Profile}
       />
     </Tab.Navigator>
   );
 }
-
-const styles = StyleSheet.create({
-  wrapper: {
-    position: "absolute",
-    bottom: 0,
-    width: "100%",
-    height: 80,
-    backgroundColor: "red",
-  },
-});
 
 export default TabNavigation;
