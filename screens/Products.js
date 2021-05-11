@@ -114,10 +114,6 @@ const styles = StyleSheet.create({
     width: 100,
     marginTop: 10,
   },
-  // productImage: {
-  //   marginTop: 10,
-  //   alignSelf: "center",
-  // },
   arrow: {
     alignSelf: "flex-end",
     marginBottom: 10,

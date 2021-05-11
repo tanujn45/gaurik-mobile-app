@@ -69,6 +69,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   arrow: {
+    marginTop: -18,
     alignSelf: "flex-end",
     margin: 10,
   },
