@@ -6,6 +6,16 @@ import AppButton from "../components/AppButton";
 
 function SignIn({ navigation }) {
   const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setmessage] = useState("");
+  function checkSignIn() {
+    if (username === "Tanujn45" && password === "Tanujn45")
+      navigation.navigate("TabNavigation");
+    else {
+      // navigation.navigate("TabNavigation");
+      setmessage("Wrong Credentials!");
+    }
+  }
   return (
     <View style={Styles.container}>
       <View style={styles.welcomeContainer}>
@@ -13,23 +23,26 @@ function SignIn({ navigation }) {
       </View>
       <View style={styles.signInContainer}>
         <Text style={[Styles.heading, styles.heading]}>Log In</Text>
+        <Text style={{ marginBottom: 20, fontSize: 18, color: "red" }}>
+          {message}
+        </Text>
         <Text style={Styles.inputTitle}>Username</Text>
         <TextInput
           style={[Styles.input, styles.input]}
-          onChange={(text) => setUsername(text)}
+          onChangeText={(text) => setUsername(text)}
           value={username}
         />
         <Text style={Styles.inputTitle}>Password</Text>
         <TextInput
           style={[Styles.input, styles.input]}
           secureTextEntry={true}
-          onChangeText={(text) => setUsername(text)}
-          value={username}
+          onChangeText={(text) => setPassword(text)}
+          value={password}
         />
         <AppButton
           title="Log In"
           style={styles.button}
-          onPress={() => navigation.navigate("TabNavigation")}
+          onPress={() => checkSignIn()}
         />
       </View>
       <Image

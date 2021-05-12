@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Image,
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
-  Button,
+  TextInput,
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import Styles from "../assets/css/Styles";
@@ -19,8 +19,22 @@ import {
   Cols,
   Cell,
 } from "react-native-table-component";
+import Modal from "react-native-modal";
+import { useSelector, useDispatch } from "react-redux";
+import { addItem } from "./../redux/actions/cart";
 
-function Product({ navigation }) {
+function Product({ navigation, route }) {
+  const [quantity, setquantity] = useState("");
+  const product = route.params;
+  const [isModalVisible, setModalVisible] = useState(false);
+  const { items } = useSelector((state) => state.cartReducer);
+  const dispatch = useDispatch();
+  // dispatch(addItem([]));
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
   const [data, setData] = useState({
     tableData: [
       ["Energy", "87 Kcal"],
@@ -50,7 +64,7 @@ function Product({ navigation }) {
               style={styles.backArrow}
             />
           </TouchableOpacity>
-          <Text style={Styles.heading}>Gold Premium</Text>
+          <Text style={Styles.heading}>{product.title}</Text>
         </View>
         <ScrollView
           contentContainerStyle={{
@@ -63,10 +77,54 @@ function Product({ navigation }) {
             source={require("../assets/img/products/goldPremium.png")}
             style={styles.productImage}
           />
-          <Text style={Styles.subHeading}>Rs. 30/Pack</Text>
+          <Modal isVisible={isModalVisible}>
+            <View style={styles.modalView}>
+              <Text style={Styles.heading}>Quantity</Text>
+              <TextInput
+                style={[Styles.input, styles.input]}
+                placeholder="Ex. 30"
+                textAlign="center"
+                fontSize="18"
+                onChangeText={(text) => setquantity(text)}
+                value={quantity}
+              />
+              <AppButton
+                title="Add +"
+                style={styles.modalButton}
+                onPress={() => {
+                  console.log(product);
+                  toggleModal();
+                  let alreadyInCart = false;
+                  for (let i = 0; i < items.length; i++) {
+                    if (items[i].product.key === product.key) {
+                      alreadyInCart = true;
+                      items[i].quantity += parseInt(quantity);
+                      dispatch(addItem([...items]));
+                    }
+                  }
+                  if (!alreadyInCart) {
+                    dispatch(
+                      addItem([
+                        ...items,
+                        {
+                          product: product,
+                          quantity: parseInt(quantity),
+                        },
+                      ])
+                    );
+                  }
+                }}
+              />
+            </View>
+          </Modal>
+          <Text style={Styles.subHeading}>Rs. {product.price}/Pack</Text>
           <Text style={[Styles.subTitle, styles.inStock]}>In Stock</Text>
-          <AppButton title="Buy Now" style={styles.buyButton} />
-          <AppButton title="Add To Cart" style={styles.cartButton} />
+          {/* <AppButton title="Buy Now" style={styles.buyButton} /> */}
+          <AppButton
+            title="Add To Cart"
+            style={styles.cartButton}
+            onPress={toggleModal}
+          />
           <Text style={[Styles.subHeading, styles.subHeading]}>
             Nutritional Facts
           </Text>
@@ -95,6 +153,31 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
+  },
+  modalView: {
+    backgroundColor: "white",
+    borderRadius: 5,
+    paddingVertical: 25,
+    paddingHorizontal: 10,
+    alignItems: "center",
+    shadowColor: "#000",
+    width: "100%",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalButton: {
+    width: "80%",
+    backgroundColor: "#FFC93C",
+  },
+  input: {
+    marginTop: 15,
+    width: "80%",
+    marginBottom: 30,
   },
   backArrow: {
     transform: [{ rotate: "180deg" }],

@@ -1,35 +1,61 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import Styles from "../assets/css/Styles";
+import Constants from "../constants/RequestURLs";
+import axios from "axios";
 
-function Categories({ navigation }) {
-  const [username, setUsername] = useState("");
+function Categories({ navigation, route }) {
+  const [categories, setcategories] = useState();
+
+  useEffect(() => {
+    axios
+      .get(`${Constants.baseURL}${Constants.categoryList}`)
+      .then((res) => {
+        if (res.status === 200) {
+          let cat = res.data;
+          setcategories(cat);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <View style={Styles.container}>
       <View style={styles.container}>
         <Text style={Styles.heading}>Categories</Text>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <TouchableOpacity
-            activeOpacity={0.8}
-            underlayColor="#DDDDDD"
-            onPress={() => navigation.navigate("Products")}
-          >
-            <View style={Styles.card}>
-              <View>
-                <Text style={Styles.subTitle}>Swad Malwa ka</Text>
-                <Text style={Styles.subHeading}>Gaurik Milk</Text>
-                <Image
-                  source={require("../assets/img/products/goldPremium.png")}
-                  style={styles.productImage}
-                />
-              </View>
-              <Image
-                style={styles.arrow}
-                source={require("../assets/img/design/arrow.png")}
-              />
-            </View>
-          </TouchableOpacity>
+          {categories &&
+            categories.map((category) => (
+              <TouchableOpacity
+                key={category.key}
+                activeOpacity={0.8}
+                underlayColor="#DDDDDD"
+                onPress={() =>
+                  navigation.navigate("Products", {
+                    title: category.title,
+                    slug: category.slug,
+                  })
+                }
+              >
+                <View style={Styles.card}>
+                  <View>
+                    <Text style={Styles.subTitle}>{category.subtitle}</Text>
+                    <Text style={Styles.subHeading}>{category.title}</Text>
+                    <Image
+                      source={require("../assets/img/products/goldPremium.png")}
+                      style={styles.productImage}
+                    />
+                  </View>
+                  <Image
+                    style={styles.arrow}
+                    source={require("../assets/img/design/arrow.png")}
+                  />
+                </View>
+              </TouchableOpacity>
+            ))}
         </ScrollView>
       </View>
       <Image
