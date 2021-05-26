@@ -1,5 +1,4 @@
 import { StyleSheet } from "react-native";
-import { Row } from "react-native-table-component";
 
 export default StyleSheet.create({
   container: {

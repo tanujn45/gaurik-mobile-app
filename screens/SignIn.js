@@ -1,19 +1,24 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, TextInput, Image } from "react-native";
+import React, { useState, useContext } from "react";
+import { View, Text, StyleSheet, TextInput, Image, Alert } from "react-native";
 
 import Styles from "../assets/css/Styles";
 import AppButton from "../components/AppButton";
+import { signInFunc } from "../api/firebaseMethods";
+import AuthContext from "../auth/context";
 
 function SignIn({ navigation }) {
-  const [username, setUsername] = useState("");
+  const authContext = useContext(AuthContext);
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setmessage] = useState("");
+  const [message, setMessage] = useState("");
+
   function checkSignIn() {
-    if (username === "Tanujn45" && password === "Tanujn45")
+    if (!email || !password) {
+      Alert.alert("Wrong credentials!");
+      setMessage("Wrong Credentials!");
+    } else {
+      authContext.setuser(signInFunc(email, password));
       navigation.navigate("TabNavigation");
-    else {
-      // navigation.navigate("TabNavigation");
-      setmessage("Wrong Credentials!");
     }
   }
   return (
@@ -26,11 +31,13 @@ function SignIn({ navigation }) {
         <Text style={{ marginBottom: 20, fontSize: 18, color: "red" }}>
           {message}
         </Text>
-        <Text style={Styles.inputTitle}>Username</Text>
+        <Text style={Styles.inputTitle}>Email</Text>
         <TextInput
           style={[Styles.input, styles.input]}
-          onChangeText={(text) => setUsername(text)}
-          value={username}
+          onChangeText={(text) => setEmail(text)}
+          autoCapitalize="none"
+          autoCorrect={false}
+          value={email}
         />
         <Text style={Styles.inputTitle}>Password</Text>
         <TextInput

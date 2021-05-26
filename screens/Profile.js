@@ -1,19 +1,19 @@
-import React, { useState } from "react";
-import {
-  Image,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Button,
-} from "react-native";
+import React, { useContext } from "react";
+import { Image, StyleSheet, Text, View } from "react-native";
 import AppButton from "../components/AppButton";
-import { ScrollView } from "react-native-gesture-handler";
 import Styles from "../assets/css/Styles";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import { Row } from "react-native-table-component";
+import AuthContext from "../auth/context";
+import { logOutFunc } from "../api/firebaseMethods";
 
-function Profile({ navigation }) {
+function Profile() {
+  const { user, setuser } = useContext(AuthContext);
+  console.log(user);
+
+  const handleLogOut = () => {
+    logOutFunc();
+    setuser(null);
+  };
+
   return (
     <View style={Styles.container}>
       <View style={styles.container}>
@@ -24,7 +24,7 @@ function Profile({ navigation }) {
           <AppButton
             title="Logout"
             style={styles.buyButton}
-            onPress={() => navigation.navigate("SignIn")}
+            onPress={handleLogOut}
           />
         </View>
 
